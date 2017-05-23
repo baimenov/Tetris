@@ -1,0 +1,33 @@
+/**
+ * 
+ */
+package view;
+
+import java.awt.EventQueue;
+
+/**
+ * Runs tetris.
+ * @author baimenov
+ * @version December 3 2016
+ */
+public final class TetrisMain {
+    
+    /**
+     * Private constructor to prevent class instantiation.
+     */
+    private TetrisMain() {
+        throw new IllegalStateException();
+    }
+    
+    /**
+     * Runs Tetris.
+     * @param theArgs main String.
+     */
+    public static void main(final String[] theArgs) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TetrisGUI().start();
+            }
+        });
+    }
+}
