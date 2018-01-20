@@ -4,6 +4,7 @@
 package view;
 
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,7 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
+import javax.media.Codec;
+import javax.media.PlugInManager;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
@@ -21,6 +26,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
+
+import com.sun.media.codec.audio.mp3.JavaDecoder;
+
+import sound.MusicPlayer;
 
 
 /**
@@ -37,6 +46,11 @@ public class TetrisGUI extends JFrame  {
      * Frame Size of the Tetris.
      */
     private static final Dimension FRAME_SIZE = new Dimension(700, 858);
+    
+    /**
+     * Color of the tetris pieces.
+     */
+    private static final Color DS_COLOR = new Color(254, 90, 29);
     
     /**
      * Tetris Panel.
@@ -58,7 +72,15 @@ public class TetrisGUI extends JFrame  {
      */
     private JPanel myScorePanel;
     
+    /**
+     * Key Listener.
+     */
+    private KeyListener myKeyListener;
     
+    /**
+     * MusicPlayer.
+     */
+    private static final MusicPlayer mp = new MusicPlayer();
     
     /**
      * Side panel with next piece preview and score.
@@ -77,10 +99,12 @@ public class TetrisGUI extends JFrame  {
         mySidePanel.add(myNextPanel);
         myScorePanel = myPanel.getScorePanel();
         mySidePanel.add(myScorePanel);
+        myKeyListener = new TetrisKeyListener();
+        setupMusic();
         add(mySidePanel, BorderLayout.EAST);
         add(myMenuBar, BorderLayout.NORTH);
         add(myPanel, BorderLayout.CENTER);
-        addKeyListener(new TetrisKeyListener());
+        addKeyListener(myKeyListener);
     }
     
     
@@ -125,7 +149,8 @@ public class TetrisGUI extends JFrame  {
                                 + "Right Arrow - Move right\n"
                                 + "Down Arrow - Shift down\nUp Arrow - Rotate 90° clockwise\n"
                                 + "Space - Drop the piece\n"
-                                + "P - Pause the game",
+                                + "P - Pause the game\n"
+                                + "M - Mute/Unmute music (it's loud)",
                                               "How to control pieces",
                                               JOptionPane.INFORMATION_MESSAGE);
             }
@@ -147,6 +172,7 @@ public class TetrisGUI extends JFrame  {
                     final int x = Integer.parseInt(jrbmi[index].getText().substring(0, 2));
                     final int y = Integer.parseInt(jrbmi[index].getText().substring(3, 5));
                     myPanel.setPanelSize(x,  y);
+                    myPanel.getTimer().start();
                 }
             });
         }
@@ -165,12 +191,28 @@ public class TetrisGUI extends JFrame  {
         final JPanel jp = new JPanel();
         final BoxLayout b = new BoxLayout(jp, BoxLayout.PAGE_AXIS);
         jp.setLayout(b);
-        jp.setBackground(Color.GREEN);
+        jp.setBackground(Color.BLACK);
+        jp.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
         jp.setPreferredSize(new Dimension(294, 100));
         return jp;
     }
     
-    
+    /**
+     * Sets up music for Tetris.
+     */
+    private void setupMusic() {
+        final Codec c = new JavaDecoder();
+        PlugInManager.addPlugIn("com.sun.media.codec.audio.mp3.JavaDecoder",
+                                c.getSupportedInputFormats(),
+                                c.getSupportedOutputFormats(null),
+                                PlugInManager.CODEC);
+        final File music = new File("sounds/ds3.wav");
+        final File[] musics = {music};
+        
+        mp.newList(musics);
+        mp.play();
+        mp.togglePause();
+    }
     
     /**
      * Inner class that handles key inputs.
@@ -202,6 +244,8 @@ public class TetrisGUI extends JFrame  {
                 } else {
                     myPanel.getTimer().start();
                 }
+            } else if (theEvent.getKeyCode() == KeyEvent.VK_M) {
+                mp.togglePause();
             }
         }
 

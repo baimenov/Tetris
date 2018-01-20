@@ -32,19 +32,6 @@ public final class TetrisMain {
      * @param theArgs main String.
      */
     public static void main(final String[] theArgs) {
-        
-        final Codec c = new JavaDecoder();
-        PlugInManager.addPlugIn("com.sun.media.codec.audio.mp3.JavaDecoder",
-                                c.getSupportedInputFormats(),
-                                c.getSupportedOutputFormats(null),
-                                PlugInManager.CODEC);
-        final File music = new File("sounds/ds3.wav");
-        final File[] musics = {music};
-        
-        final MusicPlayer m = new MusicPlayer();
-        m.newList(musics);
-        m.play();
-        
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new TetrisGUI().start();

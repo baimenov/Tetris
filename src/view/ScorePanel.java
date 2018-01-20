@@ -5,6 +5,7 @@ package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -24,6 +25,11 @@ public class ScorePanel extends JPanel implements Observer {
     private static final long serialVersionUID = 5156891741195554123L;
     
     /**
+     * Color of the tetris pieces.
+     */
+    private static final Color DS_COLOR = new Color(254, 90, 29);
+    
+    /**
      * Current score.
      */
     private int myScore;
@@ -40,7 +46,7 @@ public class ScorePanel extends JPanel implements Observer {
         super();
         myScore = 0;
         myLevel = 1;
-        setBackground(Color.CYAN);
+        setBackground(Color.BLACK);
         setPreferredSize(new Dimension(200, 200));
         setAlignmentX(CENTER_ALIGNMENT);
         setMaximumSize(new Dimension(200, 200));
@@ -65,8 +71,10 @@ public class ScorePanel extends JPanel implements Observer {
         final Graphics2D g2d = (Graphics2D) theGraphics;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                              RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.drawString("Score: " + myScore, 15, 15);
-        g2d.drawString("Level: " + myLevel, 15, 40);
+        g2d.setColor(DS_COLOR);
+        g2d.setFont(new Font("Times New Roman", Font.PLAIN, 32));
+        g2d.drawString("Score: " + myScore, 15, 30);
+        g2d.drawString("Level: " + myLevel, 15, 60);
     }
     
     /**

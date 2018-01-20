@@ -32,6 +32,11 @@ public class NextPiecePanel extends JPanel implements Observer {
     private MovableTetrisPiece myMtp;
     
     /**
+     * Color of the tetris pieces.
+     */
+    private static final Color DS_COLOR = new Color(254, 90, 29);
+    
+    /**
      * Row number where square of a piece
      * should be drawn.
      */
@@ -59,7 +64,7 @@ public class NextPiecePanel extends JPanel implements Observer {
     public NextPiecePanel() {
         super();
         myPaintColor = Color.GREEN;
-        setBackground(Color.YELLOW);
+        //setBackground(Color.YELLOW);
         setPreferredSize(new Dimension(200, 200));
         setAlignmentX(CENTER_ALIGNMENT);
         setMaximumSize(new Dimension(200, 200));
@@ -85,12 +90,14 @@ public class NextPiecePanel extends JPanel implements Observer {
             final Rectangle2D rect = new Rectangle2D.Double(myCol * 50, myRow * 50, 50, 50);
             
             if (myToPrint.charAt(i) == ' ') {
-                myPaintColor = Color.CYAN;
-                g2d.setPaint(Color.CYAN);
+                myPaintColor = Color.BLACK;
+                g2d.setPaint(Color.BLACK);
                 g2d.fill(rect);
             } else if (myToPrint.charAt(i) != '\n') {
-                g2d.setPaint(Color.ORANGE);
+                g2d.setPaint(DS_COLOR);
                 g2d.fill(rect);
+                g2d.setPaint(Color.RED);
+                g2d.draw(rect);
             }
         }
         myCol = 0;
