@@ -27,7 +27,7 @@ public final class TetrisMain {
         throw new IllegalStateException();
     }
     
-    /**
+    /** 
      * Runs Tetris.
      * @param theArgs main String.
      */
